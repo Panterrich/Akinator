@@ -14,8 +14,19 @@ void Tree_construct(struct Tree* tree)
     TREE_ASSERT_OK(tree);
 }
 
+void Node_fill(struct Node* node, char* string, size_t length, struct Node* previous_node, struct Node* left_node, struct Node* right_node)
+{
+    node->str   = string;
+    node->len   = length;
+    node->prev  = previous_node;
+    node->left  = left_node;
+    node->right = right_node;
+}
+
 void Tree_destruct(struct Tree* tree)
 {
+    Tree_null_check(tree);
+
     Node_destruct(tree->root);
 
     free(tree->name_base);
@@ -27,7 +38,9 @@ void Tree_destruct(struct Tree* tree)
 }
 
 void Node_destruct(struct Node* current_node)
-{
+{   
+    assert(current_node != nullptr);
+
     if (current_node->left  != nullptr) Node_destruct(current_node->left);
     if (current_node->right != nullptr) Node_destruct(current_node->right);
 
@@ -44,6 +57,9 @@ void Node_destruct(struct Node* current_node)
 
 struct Stack* Tree_search(const char* name, struct Tree* tree)
 {
+    Tree_null_check(tree);
+    assert(name != nullptr);
+
     struct Stack* path_element = (struct Stack*) calloc(1, sizeof(struct Stack));
     
     Stack_construct(path_element, 100);
@@ -55,9 +71,11 @@ struct Stack* Tree_search(const char* name, struct Tree* tree)
 
 int Node_search(const char* name, struct Node* current_node, struct Stack* path_element)
 {
-    Stack_push(path_element, current_node);
+    assert(name         != nullptr);
+    assert(current_node != nullptr);
+    assert(path_element != nullptr);
 
-    printf("size: %lu\n", path_element->size);
+    Stack_push(path_element, current_node);
 
     if (strcmp(name, current_node->str) == 0) 
     {
@@ -89,7 +107,6 @@ int Node_search(const char* name, struct Node* current_node, struct Stack* path_
 
         return 0;
     }
-
 }
 
 
@@ -208,7 +225,9 @@ void Tree_graph(struct Tree* tree)
 
     Node_graph(tree, tree->root, &count, text);
 
-    fprintf(text, "}\n");
+    fprintf(text, "\tlabelloc=\"t\";"
+                  "\tlabel=\"Akinator base: %s \";"
+                  "}\n", tree->name_base);
 
     fclose(text);
 
@@ -223,6 +242,8 @@ void Tree_graph(struct Tree* tree)
 
 void Node_graph(struct Tree* tree, struct Node* current_node, size_t* count, FILE* text)
 {   
+    if (*count > tree->size) return;
+
     ++(*count);
 
     if (current_node->right == nullptr && current_node->left == nullptr)
@@ -252,6 +273,8 @@ void Node_graph(struct Tree* tree, struct Node* current_node, size_t* count, FIL
 
 const char* Tree_text_ERROR(struct Tree* tree)
 {   
+    Tree_null_check(tree);
+
     switch (tree->error)
     {
         case 0: return "OK";

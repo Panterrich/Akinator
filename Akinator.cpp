@@ -4,6 +4,10 @@
 
 void Menu(const char* name_base)
 {
+    assert(name_base != nullptr);
+
+    static int voice = 1;
+
     Screen_clear();
 
     printf("# Akinator\n"
@@ -13,17 +17,25 @@ void Menu(const char* name_base)
            "[\e[6;31m2\e[0m] Определения \n"
            "[\e[6;31m3\e[0m] Сравнения обьектов \n"
            "[\e[6;31m4\e[0m] Просмотр базы данных \n"
-           "[\e[6;31m5\e[0m] Выход\n\n\n");
+           "[\e[6;31m5\e[0m] Выход \n\n\n");
 
-    system("echo \"Вас приветствует игра Акинатор. Выберите соответствующий режим игры.\" | festival --tts --language russian");
+    if (voice)
+    {
+        system("echo \"Вас приветствует игра Акинатор. Выберите соответствующий режим игры.\" | festival --tts --language russian");
+
+        voice = 0;
+    }
 
     Processing_mode(name_base);
 }
 
 void Menu_guessing(struct Tree* tree, const char* name_base)
 {
+    Tree_null_check(tree);
+    assert(name_base != nullptr);
+
     printf("\nХотите продолжить?\n"
-           "[\e[31m1\e[0m] Начать занаво\n"
+           "[\e[31m1\e[0m] Начать заново\n"
            "[\e[31m2\e[0m] Сохранить изменения\n"
            "[\e[31m3\e[0m] Выйти в меню\n");
 
@@ -34,8 +46,11 @@ void Menu_guessing(struct Tree* tree, const char* name_base)
 
 void Menu_definition(struct Tree* tree, const char* name_base)
 {
+    Tree_null_check(tree);
+    assert(name_base != nullptr);
+
     printf("\nХотите продолжить?\n"
-           "[\e[31m1\e[0m] Начать занаво\n"
+           "[\e[31m1\e[0m] Начать заново\n"
            "[\e[31m2\e[0m] Выйти в меню\n");
 
     system("echo \"Хотите продолжить?\" | festival --tts --language russian");
@@ -45,8 +60,11 @@ void Menu_definition(struct Tree* tree, const char* name_base)
 
 void Menu_comparing(struct Tree* tree, const char* name_base)
 {
+    Tree_null_check(tree);
+    assert(name_base != nullptr);
+
     printf("\nХотите продолжить?\n"
-           "[\e[31m1\e[0m] Начать занаво\n"
+           "[\e[31m1\e[0m] Начать заново\n"
            "[\e[31m2\e[0m] Выйти в меню\n");
 
     system("echo \"Хотите продолжить?\" | festival --tts --language russian");
@@ -82,6 +100,8 @@ void Screen_clear()
 
 void Processing_mode(const char* name_base)
 {
+    assert(name_base != nullptr);
+
     int mode = 0;
 
     for (mode = Getkey(); (mode != KEY_1) &&
@@ -113,13 +133,16 @@ void Processing_mode(const char* name_base)
         exit(0);
 
     default:
-        printf("Unknown mode \n");
+        printf("Unknown mode %d\n", mode);
         break;
     }
 }
 
 void Processing_mode_guessing(struct Tree* tree, const char* name_base)
 {
+    Tree_null_check(tree);
+    assert(name_base != nullptr);
+
     int command = 0;
 
     for (command = Getkey(); (command != KEY_1) && 
@@ -149,7 +172,7 @@ void Processing_mode_guessing(struct Tree* tree, const char* name_base)
             break;
 
         default:
-            printf("Unknown mode \n");
+            printf("Unknown mode %d\n", command);
             break;
     }
 }
@@ -165,17 +188,20 @@ int Processing_answer()
 
     switch (command)
     {
-        case KEY_Y: return 1;
-        case KEY_y: return 1;
-        case KEY_N: return 0;
-        case KEY_n: return 0;
+        case KEY_Y: printf("Да\n"); return 1;
+        case KEY_y: printf("Да\n"); return 1;
+        case KEY_N: printf("Нет\n"); return 0;
+        case KEY_n: printf("Нет\n"); return 0;
 
-        default: return -1;
+        default: printf("Неизветсный ответ\n"); return -1;
     }
 }
 
 void Processing_mode_definition(struct Tree* tree, const char* name_base)
-{
+{   
+    Tree_null_check(tree);
+    assert(name_base != nullptr);
+
     int command = 0;
 
     for (command = Getkey(); (command != KEY_1) && 
@@ -195,13 +221,16 @@ void Processing_mode_definition(struct Tree* tree, const char* name_base)
             break;
 
         default:
-            printf("Unknown mode \n");
+            printf("Unknown mode %d\n", command);
             break;
     }
 }
 
 void Processing_mode_comparing(struct Tree* tree, const char* name_base)
 {
+    Tree_null_check(tree);
+    assert(name_base != nullptr);
+
     int command = 0;
 
     for (command = Getkey(); (command != KEY_1) && 
@@ -221,13 +250,15 @@ void Processing_mode_comparing(struct Tree* tree, const char* name_base)
             break;
 
         default:
-            printf("Unknown mode \n");
+            printf("Unknown mode %d\n", command);
             break;
     }
 }
 
 void Mod_guessing(const char* name_base)
 {   
+    assert(name_base != nullptr);
+
     struct Tree tree = {};
 
     Tree_construct(&tree);
@@ -237,7 +268,9 @@ void Mod_guessing(const char* name_base)
 }
 
 void Mod_definition(const char* name_base)
-{
+{   
+    assert(name_base != nullptr);
+
     struct Tree tree = {};
 
     Tree_construct(&tree);
@@ -250,6 +283,8 @@ void Mod_definition(const char* name_base)
 
 void Mod_comparing(const char* name_base)
 {
+    assert(name_base != nullptr);
+
     struct Tree tree = {};
 
     Tree_construct(&tree);
@@ -262,6 +297,8 @@ void Mod_comparing(const char* name_base)
 
 void Mod_dump(const char* name_base)
 {
+    assert(name_base != nullptr);
+
     struct Tree tree = {};
 
     Tree_construct(&tree);
@@ -271,11 +308,16 @@ void Mod_dump(const char* name_base)
 
     Tree_graph(&tree);
 
+    Tree_destruct(&tree);
+
     Menu(name_base);
 }
 
 void Guessing(struct Tree* tree, const char* name_base)
-{   
+{  
+    Tree_null_check(tree);
+    assert(name_base != nullptr);
+
     Screen_clear();
 
     printf("\nДавайте я попробую угадать ваше слово.\n");
@@ -288,78 +330,31 @@ void Guessing(struct Tree* tree, const char* name_base)
 
 void Question(struct Tree* tree, struct Node* current_node)
 {
+    Tree_null_check(tree);
+    assert(current_node != nullptr);
+
     char command[MAX_SIZE_COMMAND] = {};
 
     if (current_node->left == nullptr && current_node->right == nullptr)
     {
         if (strcmp(current_node->str, "Неизвестно кто") == 0)
         {
-            printf("Я не знаю, кто это. Скажите мне кто это, чтобы я запомнил:\n");
+            printf("Я не знаю, кто это. Скажите мне кого вы загадали, чтобы я запомнил:\n");
 
-            sprintf(command, "echo \"Я не знаю, кто это. Скажите мне кто это, чтобы я запомнил.\" | festival --tts --language russian");
+            sprintf(command, "echo \"Я не знаю, кто это. Скажите мне кого вы загадали, чтобы я запомнил.\" | festival --tts --language russian");
             system(command);
 
             char new_object[MAX_SIZE_STR] = {};
             fgets(new_object, MAX_SIZE_STR, stdin);
+            new_object[strlen(new_object) - 1] = '\0';
 
-            printf("Введите определительный признак для обьекта: %s.\n"
-                    "Признак: ", new_object);
-            
-            char indication[MAX_SIZE_STR] = {};
-            fgets(indication, MAX_SIZE_STR, stdin);
-
-            struct Node* left_node  = (struct Node*) calloc(1, sizeof(struct Node));
-            struct Node* right_node = (struct Node*) calloc(1, sizeof(struct Node));
-
-            left_node->str   = current_node->str;
-            left_node->len   = current_node->len;
-            left_node->prev  = current_node;
-            left_node->left  = nullptr;
-            left_node->right = nullptr;
-
-            right_node->str   = strdup(new_object);
-            right_node->len   = strlen(left_node->str);
-            right_node->prev  = current_node;
-            right_node->left  = nullptr;
-            right_node->right = nullptr;
-
-            current_node->str   = strdup(indication);
-            current_node->len   = strlen(current_node->str);
-            current_node->left  = left_node;
-            current_node->right = right_node;
-        }
-
-        else
-        {
-            printf("\nЭто %s? [Y\\N]\n", current_node->str);
-
-            sprintf(command, "echo \"Я предположу, что это %s\" | festival --tts --language russian", current_node->str);
-            system(command);
-
-            if (Processing_answer())
+            if (Tree_search(new_object, tree)->size == 0)
             {
-                printf("\nУра! Я выйграл. Вам не удалось меня переиграть.\n");
-
-                sprintf(command, "echo \"Ура! Я выйграл. Вам не удалось меня переиграть.\" | festival --tts --language russian");
+                printf("Введите определительный признак для вашего слова: %s.\n"
+                       "Признак: ", new_object);
+                
+                sprintf(command, "echo \"Введите определительный признак для вашего слова: %s.\" | festival --tts --language russian", new_object);
                 system(command);
-            }
-
-            else
-            {
-                printf("\nЯ не знаю, кто это. Скажите мне кто это, чтобы я запомнил:\n");
-
-                sprintf(command, "echo \"Я не знаю, кто это. Скажите мне кто это, чтобы я запомнил.\" | festival --tts --language russian");
-                system(command);
-
-                char new_object[MAX_SIZE_STR] = {};
-                fgets(new_object, MAX_SIZE_STR, stdin);
-                new_object[strlen(new_object) - 1] = '\0';
-
-                printf("\nВведите разделительный признак для обьектов: %s и %s.\n"
-                        "Где из ответа \"ДА\" следует объект %s\n"
-                        "А из ответа \"НЕТ\" следует объект %s\n"
-                        "Признак: ", 
-                        current_node->str, new_object, new_object, current_node->str);
                 
                 char indication[MAX_SIZE_STR] = {};
                 fgets(indication, MAX_SIZE_STR, stdin);
@@ -368,51 +363,105 @@ void Question(struct Tree* tree, struct Node* current_node)
                 struct Node* left_node  = (struct Node*) calloc(1, sizeof(struct Node));
                 struct Node* right_node = (struct Node*) calloc(1, sizeof(struct Node));
 
-                left_node->str   = current_node->str;
-                left_node->len   = current_node->len;
-                left_node->prev  = current_node;
-                left_node->left  = nullptr;
-                left_node->right = nullptr;
+                Node_fill(left_node,    current_node->str,  current_node->len,  current_node,       nullptr,   nullptr);
+                Node_fill(right_node,   strdup(new_object), strlen(new_object), current_node,       nullptr,   nullptr);
+                Node_fill(current_node, strdup(indication), strlen(indication), current_node->prev, left_node, right_node);
 
-                right_node->str   = strdup(new_object);
-                right_node->len   = strlen(left_node->str);
-                right_node->prev  = current_node;
-                right_node->left  = nullptr;
-                right_node->right = nullptr;
+                tree->size += 2;
+            }
 
-                current_node->str   = strdup(indication);
-                current_node->len   = strlen(current_node->str);
-                current_node->left  = left_node;
-                current_node->right = right_node;
+            else
+            {
+                printf("Ваше слово %s найдено в базе данных, попробуйте сыграть ещё раз.\n", new_object);
+                
+                sprintf(command, "echo \"Ваше слово %s найдено в базе данных, попробуйте сыграть ещё раз.\" | festival --tts --language russian", new_object);
+                system(command);
+            }
+        }
+
+        else
+        {
+            printf("\nЯ предположу, что это %s? [\e[31mY\e[0m/\e[31mN\e[0m]\n", current_node->str);
+
+            sprintf(command, "echo \"Я предположу, что это %s\" | festival --tts --language russian", current_node->str);
+            system(command);
+
+            if (Processing_answer())
+            {
+                printf("\nУра! Я выиграл. Вам не удалось меня переиграть.\n");
+
+                sprintf(command, "echo \"Ура! Я выиграл. Вам не удалось меня переиграть.\" | festival --tts --language russian");
+                system(command);
+            }
+
+            else
+            {
+                printf("\nЯ не знаю, кто это. Скажите мне кого вы загадали, чтобы я запомнил.\n"
+                       "Ваше слово: ");
+
+                sprintf(command, "echo \"Я не знаю, кто это. Скажите мне кого вы загадали, чтобы я запомнил.\" | festival --tts --language russian");
+                system(command);
+
+                char new_object[MAX_SIZE_STR] = {};
+                fgets(new_object, MAX_SIZE_STR, stdin);
+                new_object[strlen(new_object) - 1] = '\0';
+
+                if (Tree_search(new_object, tree)->size == 0)
+                {
+                    printf("\nВведите признак отличающий %s от %s.\n"
+                            "Признак: ", 
+                            new_object, current_node->str);
+
+                    sprintf(command, "echo \"Введите признак отличающий %s от %s.\" | festival --tts --language russian", new_object, current_node->str);
+                    system(command);
+                    
+                    char indication[MAX_SIZE_STR] = {};
+                    fgets(indication, MAX_SIZE_STR, stdin);
+                    indication[strlen(indication) - 1] = '\0';
+
+                    struct Node* left_node  = (struct Node*) calloc(1, sizeof(struct Node));
+                    struct Node* right_node = (struct Node*) calloc(1, sizeof(struct Node));
+
+                    Node_fill(left_node,    current_node->str,  current_node->len,  current_node,       nullptr,   nullptr);
+                    Node_fill(right_node,   strdup(new_object), strlen(new_object), current_node,       nullptr,   nullptr);
+                    Node_fill(current_node, strdup(indication), strlen(indication), current_node->prev, left_node, right_node);
+
+                    tree->size += 2;
+                }
+
+                else
+                {
+                    printf("Ваше слово %s найдено в базе данных, попробуйте сыграть ещё раз.\n", new_object);
+                
+                    sprintf(command, "echo \"Ваше слово %s найдено в базе данных, попробуйте сыграть ещё раз.\" | festival --tts --language russian", new_object);
+                    system(command);
+                }
             }
         }
     }
 
     else
     {
-        printf("\nЭто %s? [Y\\N]\n", current_node->str);
+        printf("\nЭто %s? [\e[31mY\e[0m/\e[31mN\e[0m]\n", current_node->str);
 
         sprintf(command, "echo \"Это %s?\" | festival --tts --language russian", current_node->str);
         system(command);
 
-        if (Processing_answer())
-        {
-            Question(tree, current_node->right);
-        }
-
-        else
-        {
-            Question(tree, current_node->left);
-        }
+        if (Processing_answer()) Question(tree, current_node->right);                
+        else                     Question(tree, current_node->left);
     }
 }
 
 void Definition(struct Tree* tree, const char* name_base)
 {
+    Tree_null_check(tree);
+    assert(name_base != nullptr);
+
     char command[MAX_SIZE_COMMAND] = {};
 
     Screen_clear();
-    printf("\nВведите слово, определение которого хотите посмотреть:\n");
+    printf("Введите слово, определение которого хотите посмотреть.\n"
+           "Ваше слово: ");
 
     sprintf(command, "echo \"Введите слово, определение которого хотите посмотреть:\" | festival --tts --language russian");
     system(command);
@@ -434,19 +483,46 @@ void Definition(struct Tree* tree, const char* name_base)
     else
     {
         Screen_clear();
-        printf("%s:\n", name);
+        printf("%s - это", name);
 
-        for (size_t index = 0; index < path->size - 1; ++index)
-        {
+        sprintf(command, "echo \"%s - это\" | festival --tts --language russian", name);
+        system(command);
+
+        for (size_t index = 0; index < path->size - 2; ++index)
+        {   
+            if (index % 6 == 5) printf("\n");
+
             if ((path->data)[index]->left  == (path->data)[index + 1])
             {
-                printf("    не %s\n", (path->data)[index]->str);
+                printf(" не %s,", (path->data)[index]->str);
+
+                sprintf(command, "echo \" не %s\" | festival --tts --language russian", (path->data)[index]->str);
+                system(command);
             }
 
             if ((path->data)[index]->right == (path->data)[index + 1])
             {
-                printf("    %s\n", (path->data)[index]->str);
+                printf(" %s,", (path->data)[index]->str);
+
+                sprintf(command, "echo \" %s\" | festival --tts --language russian", (path->data)[index]->str);
+                system(command);
             }
+        }
+
+         if ((path->data)[path->size - 2]->left  == (path->data)[path->size - 1])
+            {
+                printf(" не %s.\n", (path->data)[path->size - 2]->str);
+
+                sprintf(command, "echo \"не %s\" | festival --tts --language russian", (path->data)[path->size - 2]->str);
+                system(command);
+            }
+
+        if ((path->data)[path->size - 2]->right == (path->data)[path->size - 1])
+        {
+            printf(" %s.\n", (path->data)[path->size - 2]->str);
+
+            sprintf(command, "echo \" %s\" | festival --tts --language russian", (path->data)[path->size - 2]->str);
+            system(command);
         }
 
         sprintf(command, "echo \"Вот определение объекта %s\" | festival --tts --language russian", name);
@@ -461,12 +537,15 @@ void Definition(struct Tree* tree, const char* name_base)
 
 void Comparing(struct Tree* tree, const char* name_base)
 {
+    Tree_null_check(tree);
+    assert(name_base != nullptr);
+
     char command[MAX_SIZE_COMMAND] = {};
 
     Screen_clear();
-    printf("\nВведите 2 слова, которое вы хотите сравниить:\n");
+    printf("Введите 2 слова, которое вы хотите сравнить:\n");
 
-    sprintf(command, "echo \"Введите 2 слова, которое вы хотите сравниить:\" | festival --tts --language russian");
+    sprintf(command, "echo \"Введите 2 слова, которое вы хотите сравнить \" | festival --tts --language russian");
     system(command);
 
     char name_1[MAX_SIZE_STR] = {};
@@ -490,7 +569,7 @@ void Comparing(struct Tree* tree, const char* name_base)
         Screen_clear();
         printf("Обьект %s не найден в базе данных %s", name_1, tree->name_base);
 
-        sprintf(command, "echo \"Объект %s не найден в базе данных %s\" | festival --tts --language russian", name_1, tree->name_base);
+        sprintf(command, "echo \"Объект %s не найден в базе данных %s \" | festival --tts --language russian", name_1, tree->name_base);
         system(command);
     }
 
@@ -499,68 +578,115 @@ void Comparing(struct Tree* tree, const char* name_base)
         Screen_clear();
         printf("Обьект %s не найден в базе данных %s", name_2, tree->name_base);
 
-        sprintf(command, "echo \"Объект %s не найден в базе данных %s\" | festival --tts --language russian", name_2, tree->name_base);
+        sprintf(command, "echo \"Объект %s не найден в базе данных %s \" | festival --tts --language russian", name_2, tree->name_base);
         system(command);
     }
 
     else
     {
         Screen_clear();
-        printf("1. %s\n"
-               "2. %s\n\n"
-               "Сходство:\n", name_1, name_2);
+        printf("%s и %s схожи тем, что", name_1, name_2);
+
+        sprintf(command, "echo \"%s и %s схожи тем что \" | festival --tts --language russian", name_1, name_2);
+        system(command);
 
         size_t index_1 = 0;
         size_t index_2 = 0;
 
         while (((path_1->data)[index_1 + 1] == (path_2->data)[index_1 + 1]) && (index_1 < path_1->size - 1) && (index_2 < path_2->size - 1))
-        {
+        {   
+            if (index_1 % 6 == 5) printf("\n");
+
             if ((path_1->data)[index_1]->left  == (path_1->data)[index_1 + 1])
             {
-                printf("    не %s\n", (path_1->data)[index_1]->str);
+                printf(" не %s,", (path_1->data)[index_1]->str);
+
+                sprintf(command, "echo \"не %s\" | festival --tts --language russian", (path_1->data)[index_1]->str);
+                system(command);
             }
 
             if ((path_1->data)[index_1]->right == (path_1->data)[index_1 + 1])
             {
-                printf("    %s\n", (path_1->data)[index_1]->str);
+                printf(" %s,", (path_1->data)[index_1]->str);
+
+                sprintf(command, "echo \" %s\" | festival --tts --language russian", (path_1->data)[index_1]->str);
+                system(command);
             }
 
             ++index_1;
             ++index_2;
         }
 
-        printf("Различия:\n"
-               "1. %s\n", name_1);
+        printf("\nно %s отличается тем, что", name_1);
+
+        sprintf(command, "echo \"но %s отличается тем что\" | festival --tts --language russian", name_1);
+        system(command);
         
         for (; index_1 < path_1->size - 1; ++index_1)
-        {
+        {   
+            if (index_1 % 6 == 5) printf("\n");
+
             if ((path_1->data)[index_1]->left  == (path_1->data)[index_1 + 1])
             {
-                printf("    не %s\n", (path_1->data)[index_1]->str);
+                printf(" не %s,", (path_1->data)[index_1]->str);
+
+                sprintf(command, "echo \"не %s\" | festival --tts --language russian", (path_1->data)[index_1]->str);
+                system(command);
             }
 
             if ((path_1->data)[index_1]->right == (path_1->data)[index_1 + 1])
             {
-                printf("    %s\n", (path_1->data)[index_1]->str);
+                printf(" %s,", (path_1->data)[index_1]->str);
+
+                sprintf(command, "echo \" %s\" | festival --tts --language russian", (path_1->data)[index_1]->str);
+                system(command);
             }
         }
 
-        printf("2. %s\n", name_2);
+        printf("\nа %s отличается тем, что", name_2);
 
-        for (; index_2 < path_2->size - 1; ++index_2)
+        sprintf(command, "echo \" а %s отличается тем что\" | festival --tts --language russian", name_2);
+        system(command);
+
+        for (; index_2 < path_2->size - 2; ++index_2)
         {
+            if (index_2 % 6 == 5) printf("\n");
+
             if ((path_2->data)[index_2]->left  == (path_2->data)[index_2 + 1])
             {
-                printf("    не %s\n", (path_2->data)[index_2]->str);
+                printf(" не %s,", (path_2->data)[index_2]->str);
+
+                sprintf(command, "echo \"не %s\" | festival --tts --language russian", (path_2->data)[index_2]->str);
+                system(command);
             }
 
             if ((path_2->data)[index_2]->right == (path_2->data)[index_2 + 1])
             {
-                printf("    %s\n", (path_2->data)[index_2]->str);
+                printf(" %s,", (path_2->data)[index_2]->str);
+
+                sprintf(command, "echo \" %s\" | festival --tts --language russian", (path_2->data)[index_2]->str);
+                system(command);
             }
         }
 
-        sprintf(command, "echo \"Вот сходства и различия объектов: %s и %s\" | festival --tts --language russian", name_1, name_2);
+        if ((path_2->data)[index_2]->left  == (path_2->data)[index_2 + 1])
+        {
+            printf(" не %s.\n", (path_2->data)[index_2]->str);
+
+            sprintf(command, "echo \"не %s\" | festival --tts --language russian", (path_2->data)[index_2]->str);
+            system(command);
+        }
+
+        if ((path_2->data)[index_2]->right == (path_2->data)[index_2 + 1])
+        {
+            printf(" %s.\n", (path_2->data)[index_2]->str);
+
+            sprintf(command, "echo \" %s\" | festival --tts --language russian", (path_2->data)[index_2]->str);
+            system(command);
+        }
+
+
+        sprintf(command, "echo \"Вот все сходства и различия объектов %s и %s\" | festival --tts --language russian", name_1, name_2);
         system(command);
     }
 
@@ -575,6 +701,9 @@ void Comparing(struct Tree* tree, const char* name_base)
 
 void Tree_create(struct Tree* tree, const char* name_base)
 {
+    Tree_null_check(tree);
+    assert(name_base != nullptr);
+
     char command[MAX_SIZE_COMMAND] = {};
     sprintf(command, "iconv -f WINDOWS-1251 -t UTF-8 %s -o test.txt && mv test.txt %s", name_base, name_base);
     system(command);
@@ -646,6 +775,11 @@ void Tree_create(struct Tree* tree, const char* name_base)
 
 struct Node* Node_create(struct Tree* tree, struct Node* previos_node, struct Text* base, size_t* number_line)
 {
+    Tree_null_check(tree);
+    assert(base         != nullptr);
+    assert(number_line  != nullptr);
+    TREE_ASSERT_OK(tree);
+
     struct Node* current_node = (struct Node*) calloc(1, sizeof(struct Node));
 
     ++(tree->size);
@@ -670,7 +804,7 @@ struct Node* Node_create(struct Tree* tree, struct Node* previos_node, struct Te
 
         *pointer_end = '\0';
 
-        current_node->len = pointer_end - pointer_begin - 1;
+        current_node->len = pointer_end - pointer_begin;
         current_node->str = (char*) calloc(current_node->len, sizeof(char));
 
         strcpy(current_node->str, pointer_begin + 1);
@@ -693,7 +827,7 @@ struct Node* Node_create(struct Tree* tree, struct Node* previos_node, struct Te
 
             *pointer_end = '\0';
 
-            current_node->len = pointer_end - pointer_begin - 1;
+            current_node->len = pointer_end - pointer_begin;
             current_node->str = (char*) calloc(current_node->len, sizeof(char));
             strcpy(current_node->str, pointer_begin + 1);
 
@@ -720,6 +854,9 @@ struct Node* Node_create(struct Tree* tree, struct Node* previos_node, struct Te
 
 void Tree_print(struct Tree* tree)
 {
+    Tree_null_check(tree);
+    TREE_ASSERT_OK(tree);
+
     char name_output[MAX_SIZE_COMMAND] = {};
     sprintf(name_output, "%s.txt", tree->name_base);
 
@@ -744,6 +881,8 @@ void Tree_print(struct Tree* tree)
 
 void Node_print(struct Node* current_node, FILE* file)
 {
+    assert(file != nullptr);
+
     if (current_node == nullptr) return;
 
     fprintf(file, "[\n");

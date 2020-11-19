@@ -107,13 +107,27 @@ enum KEYS
 
 //======================================================================
 
+void Menu(const char* name_base);
+
+void Menu_guessing(struct Tree* tree, const char* name_base);
+
+void Menu_definition(struct Tree* tree, const char* name_base);
+
+void Menu_comparing(struct Tree* tree, const char* name_base);
+
 int Getkey();
 
 void Screen_clear();
 
-void Menu(const char* name_base);
-
 void Processing_mode(const char* name_base);
+
+void Processing_mode_guessing(struct Tree* tree, const char* name_base);
+
+int Processing_answer();
+
+void Processing_mode_definition(struct Tree* tree, const char* name_base);
+
+void Processing_mode_comparing(struct Tree* tree, const char* name_base);
 
 void Mod_guessing(const char* name_base);
 
@@ -123,45 +137,36 @@ void Mod_comparing(const char* name_base);
 
 void Mod_dump(const char* name_base);
 
-int Processing_answer();
+void Guessing(struct Tree* tree, const char* name_base);
 
 void Question(struct Tree* tree, struct Node* current_node);
 
-void Processing_mode_guessing(struct Tree* tree, const char* name_base);
-
-void Guessing(struct Tree* tree, const char* name_base);
-
-void Menu_guessing(struct Tree* tree, const char* name_base);
-
 void Definition(struct Tree* tree, const char* name_base);
 
-void Menu_definition(struct Tree* tree, const char* name_base);
+void Comparing(struct Tree* tree, const char* name_base);
 
-void Processing_mode_definition(struct Tree* tree, const char* name_base);
+void Tree_create(struct Tree* tree, const char* name_base);
+
+struct Node* Node_create(struct Tree* tree, struct Node* previos_node, struct Text* base, size_t* number_line);
+
+void Tree_print(struct Tree* tree);
+
+void Node_print(struct Node* current_node, FILE* file);
+
+//=========================================================================
+
+void Tree_construct(struct Tree* tree);
+
+void Node_fill(struct Node* node, char* string, size_t length, struct Node* previous_node, struct Node* left_node, struct Node* right_node);
+
+void Tree_destruct(struct Tree* tree);
+
+void Node_destruct(struct Node* current_node);
 
 struct Stack* Tree_search(const char* name, struct Tree* tree);
 
 int Node_search(const char* name, struct Node* current_node, struct Stack* path_element);
 
-void Comparing(struct Tree* tree, const char* name_base);
-
-void Menu_comparing(struct Tree* tree, const char* name_base);
-
-void Processing_mode_comparing(struct Tree* tree, const char* name_base);
-
-void Tree_dump(struct Tree* tree, FILE* log);
-
-void Tree_graph(struct Tree* tree);
-
-void Tree_print(struct Tree* tree);
-
-void Node_graph(struct Tree* tree, struct Node* current_node, size_t* count, FILE* text);
-
-void Tree_create(struct Tree* tree, const char* name_base);
-
-void Node_print(struct Node* current_node, FILE* file);
-
-struct Node* Node_create(struct Tree* tree, struct Node* previos_node, struct Text* base, size_t* number_line);
 
 void Tree_null_check(struct Tree* tree);
 
@@ -169,11 +174,10 @@ int Tree_ERROR(struct Tree* tree);
 
 void Node_validator(struct Tree* tree, struct Node* current_node, size_t* count);
 
+void Tree_dump(struct Tree* tree, FILE* log);
+
+void Tree_graph(struct Tree* tree);
+
+void Node_graph(struct Tree* tree, struct Node* current_node, size_t* count, FILE* text);
+
 const char* Tree_text_ERROR(struct Tree* tree);
-
-void Tree_construct(struct Tree* tree);
-
-void Tree_destruct(struct Tree* tree);
-
-void Node_destruct(struct Node* current_node);
-
