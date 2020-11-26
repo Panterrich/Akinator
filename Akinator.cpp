@@ -1,4 +1,5 @@
 #include "Akinator.h"
+#include "Colors.h"
 
 //===============================================================================================================================
 
@@ -9,7 +10,7 @@ void Menu(const char* name_base)
     static int voice = 1;
 
     Screen_clear();
-
+    
     printf("# Akinator\n"
            " (c) Panterrich, 2020\n\n"
            "Выберите соотвествующий режим работы\n"
@@ -130,7 +131,7 @@ void Processing_mode(const char* name_base)
         break;
 
     case KEY_5:
-        exit(0);
+        return;
 
     default:
         printf("Unknown mode %d\n", mode);
@@ -333,20 +334,20 @@ void Question(struct Tree* tree, struct Node* current_node)
     Tree_null_check(tree);
     assert(current_node != nullptr);
 
-    char command[MAX_SIZE_COMMAND] = {};
+    char command[MAX_SIZE_COMMAND] = "";
 
     if (current_node->left == nullptr && current_node->right == nullptr)
     {
         if (strcmp(current_node->str, "Неизвестно кто") == 0)
         {
-            printf("Я не знаю, кто это. Скажите мне кого вы загадали, чтобы я запомнил:\n");
+            printf("Я не знаю, кто это. Скажите мне кого вы загадали, чтобы я запомнил.\n"
+                   "Ваше слово: ");
 
             sprintf(command, "echo \"Я не знаю, кто это. Скажите мне кого вы загадали, чтобы я запомнил.\" | festival --tts --language russian");
             system(command);
 
-            char new_object[MAX_SIZE_STR] = {};
-            fgets(new_object, MAX_SIZE_STR, stdin);
-            new_object[strlen(new_object) - 1] = '\0';
+            char new_object[MAX_SIZE_STR] = "";
+            while (!Get_word(new_object)) printf("\nВы ввели некорректное слово, попробуйте ещё.\n Ваше загаданное слово: ");
 
             if (Tree_search(new_object, tree)->size == 0)
             {
@@ -356,9 +357,8 @@ void Question(struct Tree* tree, struct Node* current_node)
                 sprintf(command, "echo \"Введите определительный признак для вашего слова: %s.\" | festival --tts --language russian", new_object);
                 system(command);
                 
-                char indication[MAX_SIZE_STR] = {};
-                fgets(indication, MAX_SIZE_STR, stdin);
-                indication[strlen(indication) - 1] = '\0';
+                char indication[MAX_SIZE_STR] = "";
+                while (!Get_word(indication)) printf("\nВы ввели некорректный признак, попробуйте ещё.\n Признак: ");
 
                 struct Node* left_node  = (struct Node*) calloc(1, sizeof(struct Node));
                 struct Node* right_node = (struct Node*) calloc(1, sizeof(struct Node));
@@ -402,9 +402,8 @@ void Question(struct Tree* tree, struct Node* current_node)
                 sprintf(command, "echo \"Я не знаю, кто это. Скажите мне кого вы загадали, чтобы я запомнил.\" | festival --tts --language russian");
                 system(command);
 
-                char new_object[MAX_SIZE_STR] = {};
-                fgets(new_object, MAX_SIZE_STR, stdin);
-                new_object[strlen(new_object) - 1] = '\0';
+                char new_object[MAX_SIZE_STR] = "";
+                while (!Get_word(new_object)) printf("\nВы ввели некорректное слово, попробуйте ещё.\n Ваше слово: ");
 
                 if (Tree_search(new_object, tree)->size == 0)
                 {
@@ -415,9 +414,8 @@ void Question(struct Tree* tree, struct Node* current_node)
                     sprintf(command, "echo \"Введите признак отличающий %s от %s.\" | festival --tts --language russian", new_object, current_node->str);
                     system(command);
                     
-                    char indication[MAX_SIZE_STR] = {};
-                    fgets(indication, MAX_SIZE_STR, stdin);
-                    indication[strlen(indication) - 1] = '\0';
+                    char indication[MAX_SIZE_STR] = "";
+                    while (!Get_word(indication)) printf("\nВы ввели некорректное слово, попробуйте ещё.\n Признак: ");
 
                     struct Node* left_node  = (struct Node*) calloc(1, sizeof(struct Node));
                     struct Node* right_node = (struct Node*) calloc(1, sizeof(struct Node));
@@ -457,7 +455,7 @@ void Definition(struct Tree* tree, const char* name_base)
     Tree_null_check(tree);
     assert(name_base != nullptr);
 
-    char command[MAX_SIZE_COMMAND] = {};
+    char command[MAX_SIZE_COMMAND] = "";
 
     Screen_clear();
     printf("Введите слово, определение которого хотите посмотреть.\n"
@@ -466,9 +464,8 @@ void Definition(struct Tree* tree, const char* name_base)
     sprintf(command, "echo \"Введите слово, определение которого хотите посмотреть:\" | festival --tts --language russian");
     system(command);
 
-    char name[MAX_SIZE_STR] = {};
-    fgets(name, MAX_SIZE_STR, stdin);
-    name[strlen(name) - 1] = '\0';
+    char name[MAX_SIZE_STR] = "";
+    while(!Get_word(name)) printf("\nВы ввели некорректное слово, попробуйте ещё.\n Ваше слово: ");
 
     struct Stack* path = Tree_search(name, tree);
 
@@ -540,7 +537,7 @@ void Comparing(struct Tree* tree, const char* name_base)
     Tree_null_check(tree);
     assert(name_base != nullptr);
 
-    char command[MAX_SIZE_COMMAND] = {};
+    char command[MAX_SIZE_COMMAND] = "";
 
     Screen_clear();
     printf("Введите 2 слова, которое вы хотите сравнить:\n");
@@ -548,17 +545,14 @@ void Comparing(struct Tree* tree, const char* name_base)
     sprintf(command, "echo \"Введите 2 слова, которое вы хотите сравнить \" | festival --tts --language russian");
     system(command);
 
-    char name_1[MAX_SIZE_STR] = {};
-    char name_2[MAX_SIZE_STR] = {};
+    char name_1[MAX_SIZE_STR] = "";
+    char name_2[MAX_SIZE_STR] = "";
 
     printf("1. ");
-    fgets(name_1, MAX_SIZE_STR, stdin);
+    while (!Get_word(name_1)) printf("\nВы ввели некорректное слово, попробуйте ещё.\n 1. ");
 
     printf("2. ");
-    fgets(name_2, MAX_SIZE_STR, stdin);
-
-    name_1[strlen(name_1) - 1] = '\0';
-    name_2[strlen(name_2) - 1] = '\0';
+    while (!Get_word(name_2)) printf("\nВы ввели некорректное слово, попробуйте ещё.\n 1. ");
 
     struct Stack* path_1 = Tree_search(name_1, tree);
     struct Stack* path_2 = Tree_search(name_2, tree);
@@ -699,206 +693,19 @@ void Comparing(struct Tree* tree, const char* name_base)
     Menu_comparing(tree, name_base);
 }
 
-void Tree_create(struct Tree* tree, const char* name_base)
+int Get_word(char* name)
 {
-    Tree_null_check(tree);
-    assert(name_base != nullptr);
-
-    char command[MAX_SIZE_COMMAND] = {};
-    sprintf(command, "iconv -f WINDOWS-1251 -t UTF-8 %s -o test.txt && mv test.txt %s", name_base, name_base);
-    system(command);
-
-    FILE* text = fopen(name_base, "rb");
-
-    if (text == nullptr)
+    if (fgets(name, MAX_SIZE_STR, stdin))
     {
-        tree->error = TREE_WRONG_NAME_DATA_BASE;
-        TREE_ASSERT_OK(tree);
+        printf("%s", name);
+
+        char* pointer_new_line = strchr(name, '\n');
+
+        if (pointer_new_line == name) return 0;
+        if (pointer_new_line)         *pointer_new_line = '\0';
+        
+        return 1;
     }
-
-    struct Text base = {};
-    Create_text(text, &base);
-
-    fclose(text);
-
-    tree->name_base = (char*) calloc(base.lines[0].len, sizeof(char));
-    sscanf(base.lines[0].str, "{ %s }", tree->name_base);
-
-    double version_base = 0;
-    sscanf(base.lines[1].str, "{ Version %lf }", &version_base);
-
-    if (version_base != VERSION)
-    {
-        tree->error = TREE_NO_SUPPORTED_VERSION_BASE;
-        TREE_ASSERT_OK(tree);
-    }
-
-    char* lang = (char*) calloc(base.lines[2].len, sizeof(char));
-    sscanf(base.lines[2].str, "{ %s }", lang);
-
-
-    if (strcmp(LANG1, lang) != 0 && strcmp(LANG2, lang) != 0)
-    {
-        tree->error = TREE_NO_SUPPORTED_LANGUAGE;
-        TREE_ASSERT_OK(tree);
-    }
-
-    free(lang);
-
-    char   first_bracket = 0;
-    size_t number_line   = 2;
-
-    while (first_bracket != '[')
-    {   
-        ++number_line;
-        sscanf(base.lines[number_line].str, " %c", &first_bracket);
-
-        if (number_line == base.n_lines)
-        {
-            tree->error = TREE_NO_DATA_IN_BASE;
-            TREE_ASSERT_OK(tree);
-        }
-    }
-
-    if (tree->root != nullptr)
-    {
-        Tree_destruct(tree);
-    }
-
-    tree->root = Node_create(tree, nullptr, &base, &number_line);
-
-    Free_memory(&base);
-
-    sprintf(command, "iconv --from-code=UTF-8 --to-code=WINDOWS-1251 %s.txt -o %s.txt", tree->name_base, tree->name_base);
-    system(command);
-}
-
-struct Node* Node_create(struct Tree* tree, struct Node* previos_node, struct Text* base, size_t* number_line)
-{
-    Tree_null_check(tree);
-    assert(base         != nullptr);
-    assert(number_line  != nullptr);
-    TREE_ASSERT_OK(tree);
-
-    struct Node* current_node = (struct Node*) calloc(1, sizeof(struct Node));
-
-    ++(tree->size);
-
-    if (strchr((base->lines)[*number_line].str, '[') == nullptr)
-    {
-        tree->error = TREE_SYNTAX_ERROR_IN_BASE;
-        TREE_ASSERT_OK(tree);
-    }
-
-    char* pointer_begin = strchr((base->lines)[(*number_line) + 1].str, '?');
-
-    if (pointer_begin != nullptr)
-    {
-        char* pointer_end = strchr(pointer_begin + 1, '?');
-
-        if (pointer_end == nullptr)
-        {
-            tree->error = TREE_SYNTAX_ERROR_IN_BASE;
-            TREE_ASSERT_OK(tree);
-        }
-
-        *pointer_end = '\0';
-
-        current_node->len = pointer_end - pointer_begin;
-        current_node->str = (char*) calloc(current_node->len, sizeof(char));
-
-        strcpy(current_node->str, pointer_begin + 1);
-
-        current_node->prev = previos_node;
-
-        *number_line += 2;
-
-        current_node->right = Node_create(tree, current_node, base, number_line);
-        current_node->left  = Node_create(tree, current_node, base, number_line);  
-    }
-
-    else 
-    {   
-        pointer_begin = strchr((base->lines)[*number_line + 1].str, '`');
-
-        if (pointer_begin != nullptr)
-        {
-            char* pointer_end = strchr(pointer_begin + 1, '`');
-
-            *pointer_end = '\0';
-
-            current_node->len = pointer_end - pointer_begin;
-            current_node->str = (char*) calloc(current_node->len, sizeof(char));
-            strcpy(current_node->str, pointer_begin + 1);
-
-            current_node->prev = previos_node;
-
-            *number_line += 2;
-
-            current_node->right = nullptr;
-            current_node->left  = nullptr;
-        }
-    }
-
-    pointer_begin = strchr((base->lines)[*number_line].str, ']');
-
-    if (pointer_begin == nullptr)
-    {
-       tree->error == TREE_SYNTAX_ERROR_IN_BASE;
-       TREE_ASSERT_OK(tree);
-    }
-
-    ++(*number_line);
-    return current_node;
-}
-
-void Tree_print(struct Tree* tree)
-{
-    Tree_null_check(tree);
-    TREE_ASSERT_OK(tree);
-
-    char name_output[MAX_SIZE_COMMAND] = {};
-    sprintf(name_output, "%s.txt", tree->name_base);
-
-    FILE* file = fopen(name_output, "w");
-
-    fprintf(file, "{ %s }\n"
-                  "{ Version %.1lg }\n"
-                  "{ RUS }\n\n",
-                   tree->name_base, VERSION);
     
-    Node_print(tree->root, file);
-
-    fclose(file);
-
-    char command[MAX_SIZE_COMMAND] = {};
-    sprintf(command, "astyle --mode=cs --style=ansi %s", name_output);
-    system(command);
-
-    sprintf(command, "iconv --from-code=UTF-8 --to-code=WINDOWS-1251 %s.txt -o %s.txt", tree->name_base, tree->name_base);
-    system(command);
-}
-
-void Node_print(struct Node* current_node, FILE* file)
-{
-    assert(file != nullptr);
-
-    if (current_node == nullptr) return;
-
-    fprintf(file, "[\n");
-
-    if (current_node->left != nullptr && current_node->right != nullptr)
-    {
-        fprintf(file, "?%s?\n", current_node->str);
-    }
-
-    else if (current_node->left == nullptr && current_node->right == nullptr)
-    {
-        fprintf(file, "`%s`\n", current_node->str);
-    }
-
-    if (current_node->right != nullptr) Node_print(current_node->right, file);
-    if (current_node->left  != nullptr) Node_print(current_node->left,  file);
-
-    fprintf(file, "]\n");
+    else return 0;
 }

@@ -153,6 +153,8 @@ void Tree_print(struct Tree* tree);
 
 void Node_print(struct Node* current_node, FILE* file);
 
+int Get_word(char* name);
+
 //=========================================================================
 
 void Tree_construct(struct Tree* tree);
