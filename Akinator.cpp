@@ -14,11 +14,11 @@ void Menu(const char* name_base)
     printf("# Akinator\n"
            " (c) Panterrich, 2020\n\n"
            "Выберите соотвествующий режим работы\n"
-           "[\e[6;31m1\e[0m] Отгадывание \n"
-           "[\e[6;31m2\e[0m] Определения \n"
-           "[\e[6;31m3\e[0m] Сравнения обьектов \n"
-           "[\e[6;31m4\e[0m] Просмотр базы данных \n"
-           "[\e[6;31m5\e[0m] Выход \n\n\n");
+           "[" RED(1) "] Отгадывание \n"
+           "[" RED(2) "] Определения \n"
+           "[" RED(3) "] Сравнения обьектов \n"
+           "[" RED(4) "] Просмотр базы данных \n"
+           "[" RED(5) "] Выход \n\n\n");
 
     if (voice)
     {
@@ -36,9 +36,9 @@ void Menu_guessing(struct Tree* tree, const char* name_base)
     assert(name_base != nullptr);
 
     printf("\nХотите продолжить?\n"
-           "[\e[31m1\e[0m] Начать заново\n"
-           "[\e[31m2\e[0m] Сохранить изменения\n"
-           "[\e[31m3\e[0m] Выйти в меню\n");
+           "[" RED(1) "] Начать заново\n"
+           "[" RED(2) "] Сохранить изменения\n"
+           "[" RED(3) "] Выйти в меню\n");
 
     system("echo \"Хотите продолжить?\" | festival --tts --language russian");
 
@@ -51,8 +51,8 @@ void Menu_definition(struct Tree* tree, const char* name_base)
     assert(name_base != nullptr);
 
     printf("\nХотите продолжить?\n"
-           "[\e[31m1\e[0m] Начать заново\n"
-           "[\e[31m2\e[0m] Выйти в меню\n");
+           "[" RED(1) "] Начать заново\n"
+           "[" RED(2) "] Выйти в меню\n");
 
     system("echo \"Хотите продолжить?\" | festival --tts --language russian");
 
@@ -65,8 +65,8 @@ void Menu_comparing(struct Tree* tree, const char* name_base)
     assert(name_base != nullptr);
 
     printf("\nХотите продолжить?\n"
-           "[\e[31m1\e[0m] Начать заново\n"
-           "[\e[31m2\e[0m] Выйти в меню\n");
+           "[" RED(1) "] Начать заново\n"
+           "[" RED(2) "] Выйти в меню\n");
 
     system("echo \"Хотите продолжить?\" | festival --tts --language russian");
 
@@ -347,7 +347,7 @@ void Question(struct Tree* tree, struct Node* current_node)
             system(command);
 
             char new_object[MAX_SIZE_STR] = "";
-            while (!Get_word(new_object)) printf("\nВы ввели некорректное слово, попробуйте ещё.\n Ваше загаданное слово: ");
+            while (!Get_word(new_object)) printf("\nВы ввели некорректное слово, попробуйте ещё.\nВаше загаданное слово: ");
 
             if (Tree_search(new_object, tree)->size == 0)
             {
@@ -381,7 +381,7 @@ void Question(struct Tree* tree, struct Node* current_node)
 
         else
         {
-            printf("\nЯ предположу, что это %s? [\e[31mY\e[0m/\e[31mN\e[0m]\n", current_node->str);
+            printf("\nЯ предположу, что это %s? [" RED(Y) "/" RED(N) "]\n", current_node->str);
 
             sprintf(command, "echo \"Я предположу, что это %s\" | festival --tts --language russian", current_node->str);
             system(command);
@@ -403,7 +403,7 @@ void Question(struct Tree* tree, struct Node* current_node)
                 system(command);
 
                 char new_object[MAX_SIZE_STR] = "";
-                while (!Get_word(new_object)) printf("\nВы ввели некорректное слово, попробуйте ещё.\n Ваше слово: ");
+                while (!Get_word(new_object)) printf("\nВы ввели некорректное слово, попробуйте ещё.\nВаше слово: ");
 
                 if (Tree_search(new_object, tree)->size == 0)
                 {
@@ -415,7 +415,7 @@ void Question(struct Tree* tree, struct Node* current_node)
                     system(command);
                     
                     char indication[MAX_SIZE_STR] = "";
-                    while (!Get_word(indication)) printf("\nВы ввели некорректное слово, попробуйте ещё.\n Признак: ");
+                    while (!Get_word(indication)) printf("\nВы ввели некорректное слово, попробуйте ещё.\nПризнак: ");
 
                     struct Node* left_node  = (struct Node*) calloc(1, sizeof(struct Node));
                     struct Node* right_node = (struct Node*) calloc(1, sizeof(struct Node));
@@ -440,7 +440,7 @@ void Question(struct Tree* tree, struct Node* current_node)
 
     else
     {
-        printf("\nЭто %s? [\e[31mY\e[0m/\e[31mN\e[0m]\n", current_node->str);
+        printf("\nЭто %s? [" RED(Y) "/" RED(N) "]\n", current_node->str);
 
         sprintf(command, "echo \"Это %s?\" | festival --tts --language russian", current_node->str);
         system(command);
@@ -465,7 +465,7 @@ void Definition(struct Tree* tree, const char* name_base)
     system(command);
 
     char name[MAX_SIZE_STR] = "";
-    while(!Get_word(name)) printf("\nВы ввели некорректное слово, попробуйте ещё.\n Ваше слово: ");
+    while(!Get_word(name)) printf("\nВы ввели некорректное слово, попробуйте ещё.\nВаше слово: ");
 
     struct Stack* path = Tree_search(name, tree);
 
@@ -549,10 +549,10 @@ void Comparing(struct Tree* tree, const char* name_base)
     char name_2[MAX_SIZE_STR] = "";
 
     printf("1. ");
-    while (!Get_word(name_1)) printf("\nВы ввели некорректное слово, попробуйте ещё.\n 1. ");
+    while (!Get_word(name_1)) printf("\nВы ввели некорректное слово, попробуйте ещё.\n1. ");
 
     printf("2. ");
-    while (!Get_word(name_2)) printf("\nВы ввели некорректное слово, попробуйте ещё.\n 1. ");
+    while (!Get_word(name_2)) printf("\nВы ввели некорректное слово, попробуйте ещё.\n2. ");
 
     struct Stack* path_1 = Tree_search(name_1, tree);
     struct Stack* path_2 = Tree_search(name_2, tree);
@@ -697,8 +697,6 @@ int Get_word(char* name)
 {
     if (fgets(name, MAX_SIZE_STR, stdin))
     {
-        printf("%s", name);
-
         char* pointer_new_line = strchr(name, '\n');
 
         if (pointer_new_line == name) return 0;
