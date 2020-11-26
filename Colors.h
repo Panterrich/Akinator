@@ -1,26 +1,53 @@
-#define CBG_BLACK       "40;"
-#define CBG_RED         "41;"
-#define CBG_GREEN       "42;"
-#define CBG_YELLOW      "43;"
-#define CBG_BLUE        "44;"
-#define CBG_MARGENTA    "45;"
-#define CBG_CYAN        "46;"
-#define CBG_WHITE       "47;"
+#define CBOLD        "1"
+#define CITALIC      "3"
+#define CUNDERLINE   "4"
+#define CBLINKING    "5"
+#define CINVIS       "8"
 
-#define CBG_NORMAL      "49;"
+#define CBLACK       "30"
+#define CRED         "31"
+#define CGREEN       "32"
+#define CYELLOW      "33"
+#define CBLUE        "34"
+#define CMARGENTA    "35"
+#define CCYAN        "36"
+#define CWHITE       "37"
 
-#define CBLACK       "30;"
-#define CRED         "31;"
-#define CGREEN       "32;"
-#define CYELLOW      "33;"
-#define CBLUE        "34;"
-#define CMARGENTA    "35;"
-#define CCYAN        "36;"
-#define CWHITE       "37;"
+#define CNORMAL      "39"
 
-#define CNORMAL      "39;"
+#define CBG_BLACK       "40"
+#define CBG_RED         "41"
+#define CBG_GREEN       "42"
+#define CBG_YELLOW      "43"
+#define CBG_BLUE        "44"
+#define CBG_MARGENTA    "45"
+#define CBG_CYAN        "46"
+#define CBG_WHITE       "47"
+
+#define CBG_NORMAL      "49"
+
+//=======================================================
+
 
 #define RESET() "\e[0m"  
+
+//=======================================================
+#define BOLD(text)        "\e[1m" #text "\e[0m"
+#define ITALIC(text)      "\e[3m" #text "\e[0m"
+#define UNDERLINE(text)   "\e[4m" #text "\e[0m"
+#define BLINKING(text)    "\e[5m" #text "\e[0m"
+#define INVIS(text)       "\e[8m" #text "\e[0m"
+
+#define BLACK(text)       "\e[30m" #text "\e[0m"
+#define RED(text)         "\e[31m" #text "\e[0m"
+#define GREEN(text)       "\e[32m" #text "\e[0m"
+#define YELLOW(text)      "\e[33m" #text "\e[0m"
+#define BLUE(text)        "\e[34m" #text "\e[0m"
+#define MARGENTA(text)    "\e[35m" #text "\e[0m"
+#define CYAN(text)        "\e[36m" #text "\e[0m"
+#define WHITE(text)       "\e[37m" #text "\e[0m"
+
+#define NORMAL(text)      "\e[39m" #text "\e[0m"
 
 #define BG_BLACK(text)       "\e[40m" #text "\e[0m"
 #define BG_RED(text)         "\e[41m" #text "\e[0m"
@@ -33,14 +60,45 @@
 
 #define BG_NORMAL(text)     "\e[49m" #text "\e[0m"
 
-#define BLACK(text)       "\e[30m" #text "\e[0m"
-#define RED(text)         "\e[31m" #text "\e[0m"
-#define GREEN(text)       "\e[32m" #text "\e[0m"
-#define YELLOW(text)      "\e[33m" #text "\e[0m"
-#define BLUE(text)        "\e[34m" #text "\e[0m"
-#define MARGENTA(text)    "\e[35m" #text "\e[0m"
-#define CYAN(text)        "\e[36m" #text "\e[0m"
-#define WHITE(text)       "\e[37m" #text "\e[0m"
+//=======================================================
 
-#define NORMAL(text)      "\e[39m" #text "\e[0m"
+#define SBOLD(text)        "\e[1m" text "\e[0m"
+#define SITALIC(text)      "\e[3m" text "\e[0m"
+#define SUNDERLINE(text)   "\e[4m" text "\e[0m"
+#define SBLINKING(text)    "\e[5m" text "\e[0m"
+#define SINVIS(text)       "\e[8m" text "\e[0m"
+
+#define SBLACK(text)       "\e[30m" text "\e[0m"
+#define SRED(text)         "\e[31m" text "\e[0m"
+#define SGREEN(text)       "\e[32m" text "\e[0m"
+#define SYELLOW(text)      "\e[33m" text "\e[0m"
+#define SBLUE(text)        "\e[34m" text "\e[0m"
+#define SMARGENTA(text)    "\e[35m" text "\e[0m"
+#define SCYAN(text)        "\e[36m" text "\e[0m"
+#define SWHITE(text)       "\e[37m" text "\e[0m"
+
+#define SNORMAL(text)      "\e[39m" text "\e[0m"
+
+#define SBG_BLACK(text)       "\e[40m" text "\e[0m"
+#define SBG_RED(text)         "\e[41m" text "\e[0m"
+#define SBG_GREEN(text)       "\e[42m" text "\e[0m"
+#define SBG_YELLOW(text)      "\e[43m" text "\e[0m"
+#define SBG_BLUE(text)        "\e[44m" text "\e[0m"
+#define SBG_MARGENTA(text)    "\e[45m" text "\e[0m"
+#define SBG_CYAN(text)        "\e[46m" text "\e[0m"
+#define SBG_WHITE(text)       "\e[47m" text "\e[0m"
+
+#define SBG_NORMAL(text)     "\e[49m" text "\e[0m"
+
+//=======================================================
+
+
+#define COLOR1(text, par1) "\e[" par1 "m" #text "\e[0m"
+#define COLOR2(text, par1, par2) "\e[" par1 ";" par2 "m" #text "\e[0m"
+#define COLOR3(text, par1, par2, par3) "\e[" par1 ";" par2 ";" par3 "m" #text "\e[0m"
+
+#define SCOLOR1(text, par1) "\e[" par1 "m" text "\e[0m"
+#define SCOLOR2(text, par1, par2) "\e[" par1 ";" par2 "m" text "\e[0m"
+#define SCOLOR3(text, par1, par2, par3) "\e[" par1 ";" par2 ";" par3 "m" text "\e[0m"
+
 
