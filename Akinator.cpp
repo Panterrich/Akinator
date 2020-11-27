@@ -347,7 +347,15 @@ void Question(struct Tree* tree, struct Node* current_node)
             system(command);
 
             char new_object[MAX_SIZE_STR] = "";
-            while (!Get_word(new_object)) printf("\nВы ввели некорректное слово, попробуйте ещё.\nВаше загаданное слово: ");
+            for (int result = Get_word(new_object); result != 1; result = Get_word(new_object))
+            {
+                if (result ==  0)  printf("\nВы ввели некорректное слово, попробуйте ещё.\nВаше загаданное слово: ");
+                if (result == -1)
+                {   
+                    printf("\n\nВвод был завершён\n");
+                    return;
+                }
+            }
 
             if (Tree_search(new_object, tree)->size == 0)
             {
@@ -358,7 +366,15 @@ void Question(struct Tree* tree, struct Node* current_node)
                 system(command);
                 
                 char indication[MAX_SIZE_STR] = "";
-                while (!Get_word(indication)) printf("\nВы ввели некорректный признак, попробуйте ещё.\n Признак: ");
+                for (int result = Get_word(indication); result != 1; result = Get_word(indication))
+                {
+                    if (result ==  0) printf("\nВы ввели некорректный признак, попробуйте ещё.\nПризнак: ");
+                    if (result == -1) 
+                    {   
+                        printf("\n\nВвод был завершён\n");
+                        return;
+                    }
+                }
 
                 struct Node* left_node  = (struct Node*) calloc(1, sizeof(struct Node));
                 struct Node* right_node = (struct Node*) calloc(1, sizeof(struct Node));
@@ -403,7 +419,15 @@ void Question(struct Tree* tree, struct Node* current_node)
                 system(command);
 
                 char new_object[MAX_SIZE_STR] = "";
-                while (!Get_word(new_object)) printf("\nВы ввели некорректное слово, попробуйте ещё.\nВаше слово: ");
+                for (int result = Get_word(new_object); result != 1; result = Get_word(new_object))
+                {
+                    if (result ==  0)  printf("\nВы ввели некорректное слово, попробуйте ещё.\nВаше слово: ");
+                    if (result == -1) 
+                    {   
+                        printf("\n\nВвод был завершён\n");
+                        return;
+                    }
+                }
 
                 if (Tree_search(new_object, tree)->size == 0)
                 {
@@ -415,7 +439,15 @@ void Question(struct Tree* tree, struct Node* current_node)
                     system(command);
                     
                     char indication[MAX_SIZE_STR] = "";
-                    while (!Get_word(indication)) printf("\nВы ввели некорректное слово, попробуйте ещё.\nПризнак: ");
+                    for (int result = Get_word(indication); result != 1; result = Get_word(indication))
+                    {
+                        if (result ==  0) printf("\nВы ввели некорректный признак, попробуйте ещё.\nПризнак: ");
+                        if (result == -1) 
+                        {   
+                            printf("\n\nВвод был завершён\n");
+                            return;
+                        }
+                    }
 
                     struct Node* left_node  = (struct Node*) calloc(1, sizeof(struct Node));
                     struct Node* right_node = (struct Node*) calloc(1, sizeof(struct Node));
@@ -465,7 +497,15 @@ void Definition(struct Tree* tree, const char* name_base)
     system(command);
 
     char name[MAX_SIZE_STR] = "";
-    while(!Get_word(name)) printf("\nВы ввели некорректное слово, попробуйте ещё.\nВаше слово: ");
+    for (int result = Get_word(name); result != 1; result = Get_word(name))
+    {
+        if (result ==  0) printf("\nВы ввели некорректный слово, попробуйте ещё.\nВаше слово: ");
+        if (result == -1) 
+        {   
+            printf("\n\nВвод был завершён\n");
+            return;
+        }
+    }
 
     struct Stack* path = Tree_search(name, tree);
 
@@ -549,10 +589,26 @@ void Comparing(struct Tree* tree, const char* name_base)
     char name_2[MAX_SIZE_STR] = "";
 
     printf("1. ");
-    while (!Get_word(name_1)) printf("\nВы ввели некорректное слово, попробуйте ещё.\n1. ");
+    for (int result = Get_word(name_1); result != 1; result = Get_word(name_1))
+    {
+        if (result ==  0) printf("\nВы ввели некорректное слово, попробуйте ещё.\n1. ");
+        if (result == -1) 
+        {   
+            printf("\n\nВвод был завершён\n");
+            return;
+        }
+    }
 
     printf("2. ");
-    while (!Get_word(name_2)) printf("\nВы ввели некорректное слово, попробуйте ещё.\n2. ");
+    for (int result = Get_word(name_2); result != 1; result = Get_word(name_2))
+    {
+        if (result ==  0) printf("\nВы ввели некорректное слово, попробуйте ещё.\n2. ");
+        if (result == -1) 
+        {   
+            printf("\n\nВвод был завершён\n");
+            return;
+        }
+    }
 
     struct Stack* path_1 = Tree_search(name_1, tree);
     struct Stack* path_2 = Tree_search(name_2, tree);
@@ -698,12 +754,10 @@ int Get_word(char* name)
     if (fgets(name, MAX_SIZE_STR, stdin))
     {
         char* pointer_new_line = strchr(name, '\n');
+        if (pointer_new_line) *pointer_new_line = '\0';
 
-        if (pointer_new_line == name) return 0;
-        if (pointer_new_line)         *pointer_new_line = '\0';
-        
-        return 1;
+        return *name;
     }
     
-    else return 0;
+    else return -1;
 }
